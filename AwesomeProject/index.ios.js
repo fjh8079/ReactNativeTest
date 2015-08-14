@@ -1,21 +1,23 @@
-/**
-* Sample React Native App
-* https://github.com/facebook/react-native
-*/
 'use strict';
+
 var React = require('react-native');
 var {
-    ScrollView,
-    TouchableHighlight,
     AppRegistry,
+    StyleSheet,
     Image,
     ListView,
-    StyleSheet,
+    TouchableHighlight,
     Text,
     View,
 } = React;
 
-var REQUEST_URL = 'http://192.168.1.102:8888/test.json';
+var API_KEY = '7waqfqbprs7pajbz28mqf6vz';
+var API_URL = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json';
+var PAGE_SIZE = 25;
+var PARAMS = '?apikey=' + API_KEY + '&page_limit=' + PAGE_SIZE;
+var REQUEST_URL = API_URL + PARAMS;
+
+console.log(REQUEST_URL);
 
 var AwesomeProject = React.createClass({
     getInitialState: function() {
@@ -36,7 +38,7 @@ fetchData: function() {
     .then((response) => response.json())
     .then((responseData) => {
         this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(responseData),
+        dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
         loaded: true,
         });
     })
@@ -69,7 +71,7 @@ renderLoadingView: function() {
 
 renderMovie: function(movie) {
     return (
-        <TouchableHighlight onPress={() => console.log('pressed')}>
+        <TouchableHighlight>
             <View style={styles.container}>
                 <Image
                     source={{uri: movie.posters.thumbnail}}
@@ -82,19 +84,22 @@ renderMovie: function(movie) {
             </View>
         </TouchableHighlight>
         );
-    }
+    },
 });
 
 var styles = StyleSheet.create({
     container: {
+        padding: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
-        paddingBottom: 10
     },
     rightContainer: {
+        paddingLeft: 10,
         flex: 1,
     },
     title: {
@@ -110,8 +115,9 @@ var styles = StyleSheet.create({
         height: 81,
     },
     listView: {
-        backgroundColor: '#F5FCFF'
-    }
+        paddingTop: 20,
+        backgroundColor: '#F5FCFF',
+    },
 });
 
-AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
+AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject); 
